@@ -15,7 +15,7 @@ class Stack {
     
         void pop() {  
             if (isEmpty()) {  
-                std::cout << "Stack rong - khong co phan tu nao de xoa" << std::endl;  
+                std::cout << "Stack rong - khong co gi ca" << std::endl;  
                 return;  
             }  
             elements.pop_back();  
@@ -39,7 +39,7 @@ int main() {
     // Kiểm tra giá trị trên cùng khi stack rỗng  
     auto topElement = stack.peek();  
     if (!topElement) {  
-        std::cout << "Stack is empty, cannot peek." << std::endl; // Thông báo khi stack rỗng  
+        std::cout << "Stack rong - khong co gi ca" << std::endl; // Thông báo khi stack rỗng  
     }  
 
     // Thêm một số phần tử vào stack  
@@ -67,7 +67,7 @@ int main() {
     stack.pop(); // Bây giờ stack rỗng  
     topElement = stack.peek();  
     if (!topElement) {  
-        std::cout << "Stack is empty, cannot peek." << std::endl; // Thông báo khi stack rỗng  
+        std::cout << "Stack rong - khong co gi ca" << std::endl; // Thông báo khi stack rỗng  
     }  
 
     return 0;

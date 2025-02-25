@@ -1,99 +1,72 @@
 #include <iostream>  
-using namespace std;  
+#include <vector>  
+#include <optional> // Để sử dụng std::optional  
 
 class Queue {  
 private:  
-    int* arr;      // Mảng lưu trữ các phần tử  
-    int front;     // Chỉ số phần tử đầu hàng  
-    int rear;      // Chỉ số phần tử cuối hàng  
-    int capacity;  // Sức chứa của hàng đợi  
-    int count;     // Số lượng phần tử hiện tại trong hàng đợi  
+    std::vector<int> elements;  
 
 public:  
-    // Con 
-    Queue(int size) {  
-        arr = new int[size];  
-        capacity = size;  
-        front = 0;  
-        rear = -1;  
-        count = 0;  
+    void enqueue(int value) {  
+        elements.push_back(value); // Thêm phần tử vào cuối hàng đợi  
     }  
 
-    // Des
-    ~Queue() {  
-        delete[] arr;  
-    }  
-
-    // Thêm phần tử vào hàng đợi  
-    void enqueue(int item) {  
-        if (isFull()) {  
-            cout << "Hàng đợi đã đầy!" << endl;  
+    void dequeue() {  
+        if (isEmpty()) {  
+            std::cout << "Queue is empty, cannot dequeue." << std::endl;  
             return;  
         }  
-        rear = (rear + 1) % capacity; // Vòng lại khi đến cuối mảng  
-        arr[rear] = item;  
-        count++;  
+        elements.erase(elements.begin()); // Xóa phần tử đầu tiên  
     }  
 
-    // Xóa phần tử khỏi hàng đợi  
-    int dequeue() {  
+    bool isEmpty() const {  
+        return elements.empty(); // Kiểm tra xem hàng đợi có rỗng không  
+    }  
+
+    std::optional<int> peek() {  
         if (isEmpty()) {  
-            cout << "Hàng đợi rỗng!" << endl;  
-            return -1;  
+            return std::nullopt; // Không có giá trị  
         }  
-        int item = arr[front];  
-        front = (front + 1) % capacity; // Vòng lại khi lên tới cuối  
-        count--;  
-        return item;  
-    }  
-
-    // Kiểm tra hàng đợi có rỗng hay không  
-    bool isEmpty() {  
-        return (count == 0);  
-    }  
-
-    // Kiểm tra hàng đợi có đầy hay không  
-    bool isFull() {  
-        return (count == capacity);  
-    }  
-
-    // Lấy phần tử đầu hàng mà không xóa  
-    int peek() {  
-        if (isEmpty()) {  
-            cout << "Hàng đợi rỗng!" << endl;  
-            return arr.back();  
-        }  
-        return arr[front];  
-    }  
-
-    // Số lượng phần tử trong hàng đợi  
-    int size() {  
-        return count;  
+        return elements.front(); // Trả về phần tử đầu tiên  
     }  
 };  
 
 int main() {  
-    Queue q(5); // Khởi tạo hàng đợi với sức chứa 5  
+    Queue queue;  
 
-    // Thêm phần tử vào hàng đợi  
-    q.enqueue(100);  
-    q.enqueue(200);  
-    q.enqueue(300);  
-    q.enqueue(400);  
-    q.enqueue(500);  
-    
-    cout << "Phần tử ở đầu hàng: " << q.peek() << endl; // Kiểm tra phần tử đầu hàng  
-    cout << "Xóa phần tử: " << q.dequeue() << endl; // Xóa phần tử đầu hàng  
-    cout << "Phần tử ở đầu hàng: " << q.peek() << endl; // Kiểm tra lại phần tử đầu hàng  
+    // Kiểm tra giá trị đầu tiên khi hàng đợi rỗng  
+    auto frontElement = queue.peek();  
+    if (!frontElement) {  
+        std::cout << "Queue rong - khong co gi dau" << std::endl; // Thông báo khi hàng đợi rỗng  
+    }  
 
-    // Thêm một phần tử nữa  
-    q.enqueue(600);  
-    
-    // Thử thêm khi hàng đợi đã đầy  
-    q.enqueue(700);  
-    
-    // In số lượng phần tử trong hàng đợi  
-    cout << "Số lượng phần tử trong hàng đợi: " << q.size() << endl;  
+    // Thêm một số phần tử vào hàng đợi  
+    queue.enqueue(19);  
+    queue.enqueue(4);  
+    queue.enqueue(2000);  
+
+    // Kiểm tra giá trị đầu tiên sau khi thêm phần tử  
+    frontElement = queue.peek();  
+    if (frontElement) {  
+        std::cout << "Phần tử đầu tiên là: " << *frontElement << std::endl; // Xuất ra phần tử đầu tiên  
+    }  
+
+    // Xóa phần tử đầu tiên  
+    queue.dequeue();  
+
+    // Kiểm tra lại giá trị đầu tiên  
+    frontElement = queue.peek();  
+    if (frontElement) {  
+        std::cout << "Phần tử đầu tiên sau khi dequeue là: " << *frontElement << std::endl; // Xuất ra phần tử đầu tiên  
+    }  
+
+    // Xóa hết để kiểm tra lại  
+    queue.dequeue();   
+    queue.dequeue(); // Bây giờ hàng đợi rỗng  
+    frontElement = queue.peek();  
+    if (!frontElement) {  
+        std::cout << "Queue is empty, cannot peek." << std::endl; // Thông báo khi hàng đợi rỗng  
+    }  
 
     return 0;  
 }
