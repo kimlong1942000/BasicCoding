@@ -3,30 +3,17 @@ using namespace std;
 
 class Stack {  
 private:  
-    int* arr;      // Mảng lưu trữ các phần tử  
-    int top;       // Chỉ số phần tử đỉnh  
-    int capacity;  // Sức chứa của ngăn xếp  
+    vector<int> arr;  // thay vector cho arrray
 
 public:  
-    // Con  
-    Stack(int size) {  
-        arr = new int[size];  
-        capacity = size;  
-        top = -1; // Đỉnh ngăn xếp rỗng  
-    }  
+    // Constructor  
+    Stack() = default; // Sử dụng mặc định constructor  
 
-    // Des
-    ~Stack() {  
-        delete[] arr;  
-    }  
+    // Destructor - không cần thiết, vector tự động giải phóng bộ nhớ  
 
     // Thêm phần tử vào ngăn xếp  
-    void push(int item) {  
-        if (isFull()) {  
-            cout << "Ngăn xếp đã đầy!" << endl;  
-            return;  
-        }  
-        arr[++top] = item; // Tăng chỉ số đỉnh và thêm phần tử  
+    void push(int x) {  
+        arr.push_back(x); // Thêm phần tử vào cuối vector  
     }  
 
     // Xóa phần tử khỏi ngăn xếp  
@@ -35,31 +22,26 @@ public:
             cout << "Ngăn xếp rỗng!" << endl;  
             return -1;  
         }  
-        return arr[top--]; // Trả về phần tử đỉnh và giảm chỉ số đỉnh  
+        return arr.back();
     }  
 
     // Kiểm tra ngăn xếp có rỗng hay không  
     bool isEmpty() {  
-        return (top == -1);  
-    }  
-
-    // Kiểm tra ngăn xếp có đầy hay không  
-    bool isFull() {  
-        return (top == capacity - 1);  
+        return arr.empty();  
     }  
 
     // Lấy phần tử đỉnh mà không xóa  
     int peek() {  
-        if (isEmpty()) {  
-            cout << "Ngăn xếp rỗng!" << endl;  
-            return -1;  
+        if (arr.empty()) {  
+            std::cout << "Stack is empty" << std::endl;  
+            return -1; // Trả về -1 nếu stack rỗng  
         }  
-        return arr[top];  
+        return arr.back(); // Trả về phần tử trên cùng  
     }  
 
     // Số lượng phần tử trong ngăn xếp  
     int size() {  
-        return top + 1;  
+        return arr.size();  
     }  
 };  
 
