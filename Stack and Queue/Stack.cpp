@@ -1,69 +1,74 @@
 #include <iostream>  
+#include <vector>  
+#include <optional> // Để sử dụng std::optional  
+
 using namespace std;  
 
 class Stack {  
-private:  
-    vector<int> arr;  // thay vector cho arrray
-
-public:  
-    // Constructor  
-    Stack() = default; // Sử dụng mặc định constructor  
-
-    // Destructor - không cần thiết, vector tự động giải phóng bộ nhớ  
-
-    // Thêm phần tử vào ngăn xếp  
-    void push(int x) {  
-        arr.push_back(x); // Thêm phần tử vào cuối vector  
-    }  
-
-    // Xóa phần tử khỏi ngăn xếp  
-    int pop() {  
-        if (isEmpty()) {  
-            cout << "Ngăn xếp rỗng!" << endl;  
-            return -1;  
+    private:  
+        std::vector<int> elements;  // sử dụng vector thay cho Array
+    
+    public:  
+        void push(int value) {  
+            elements.push_back(value);  
         }  
-        return arr.back();
-    }  
-
-    // Kiểm tra ngăn xếp có rỗng hay không  
-    bool isEmpty() {  
-        return arr.empty();  
-    }  
-
-    // Lấy phần tử đỉnh mà không xóa  
-    int peek() {  
-        if (arr.empty()) {  
-            std::cout << "Stack is empty" << std::endl;  
-            return -1; // Trả về -1 nếu stack rỗng  
+    
+        void pop() {  
+            if (isEmpty()) {  
+                std::cout << "Stack rong - khong co phan tu nao de xoa" << std::endl;  
+                return;  
+            }  
+            elements.pop_back();  
         }  
-        return arr.back(); // Trả về phần tử trên cùng  
-    }  
-
-    // Số lượng phần tử trong ngăn xếp  
-    int size() {  
-        return arr.size();  
-    }  
-};  
+    
+        bool isEmpty() const {  
+            return elements.empty();  
+        }  
+    
+        std::optional<int> peek() {  
+            if (isEmpty()) {  
+                return std::nullopt; // Không có giá trị  
+            }  
+            return elements.back(); // Trả về phần tử trên cùng  
+        }  
+    };  
 
 int main() {  
-    Stack s(5); // Khởi tạo ngăn xếp với sức chứa 5  
+    Stack stack;  
 
-    // Thêm phần tử vào ngăn xếp  
-    s.push(10);  
-    s.push(20);  
-    s.push(30);  
-    s.push(40);  
-    s.push(50);  
-    
-    cout << "Phần tử đỉnh: " << s.peek() << endl; // Kiểm tra phần tử đỉnh  
-    cout << "Xóa phần tử: " << s.pop() << endl; // Xóa phần tử đỉnh  
-    cout << "Phần tử đỉnh sau khi xóa: " << s.peek() << endl; // Kiểm tra lại phần tử đỉnh  
+    // Kiểm tra giá trị trên cùng khi stack rỗng  
+    auto topElement = stack.peek();  
+    if (!topElement) {  
+        std::cout << "Stack is empty, cannot peek." << std::endl; // Thông báo khi stack rỗng  
+    }  
 
-    // Thử thêm khi ngăn xếp đã đầy  
-    s.push(60); // Thêm phần tử 60, nhưng ngăn xếp đã đầy  
+    // Thêm một số phần tử vào stack  
+    stack.push(19);  
+    stack.push(4);  
+    stack.push(2000);  
 
-    // In số lượng phần tử trong ngăn xếp  
-    cout << "Số lượng phần tử trong ngăn xếp: " << s.size() << endl;  
+    // Kiểm tra giá trị trên cùng sau khi thêm phần tử  
+    topElement = stack.peek();  
+    if (topElement) {  
+        std::cout << "Phần tử trên cùng là: " << *topElement << std::endl; // Xuất ra phần tử trên cùng  
+    }  
 
-    return 0;  
+    // Xóa phần tử trên cùng  
+    stack.pop();  
+
+    // Kiểm tra lại giá trị trên cùng  
+    topElement = stack.peek();  
+    if (topElement) {  
+        std::cout << "Phần tử trên cùng sau khi pop là: " << *topElement << std::endl; // Xuất ra phần tử trên cùng  
+    }  
+
+    // Xóa hết để kiểm tra lại  
+    stack.pop();   
+    stack.pop(); // Bây giờ stack rỗng  
+    topElement = stack.peek();  
+    if (!topElement) {  
+        std::cout << "Stack is empty, cannot peek." << std::endl; // Thông báo khi stack rỗng  
+    }  
+
+    return 0;
 }
